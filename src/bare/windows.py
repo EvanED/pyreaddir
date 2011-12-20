@@ -110,7 +110,13 @@ def readdir_gen(directory):
     directory = unicode(directory + '\\*')
     result = WIN32_FIND_DATAW()
     presult = pointer(result)
-    hFind = find_first_file_w(directory, presult)
+    #hFind = find_first_file_w(directory, presult)
+    hFind = find_first_file_exw(directory,
+                                FindExInfoBasic,
+                                presult,
+                                FindExSearchNameMatch,
+                                None,
+                                FIND_FIRST_EX_LARGE_FETCH)
     
     if not hFind:
         raise Exception('Not found')
