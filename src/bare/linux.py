@@ -101,10 +101,11 @@ def readdir_gen(directory):
         yield dirent.contents
 
     
-def genericize(dirent):
+def genericize(path, dirent):
     return generic.DirectoryEntry(dirent.d_name,
+                                  path,
                                   dt_type_values[dirent.d_type][1],
                                   dirent.d_ino)
 
 def listdir(dirname):
-    return (genericize(entry) for entry in readdir_gen(dirname))
+    return (genericize(dirname, entry) for entry in readdir_gen(dirname))

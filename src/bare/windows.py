@@ -172,10 +172,11 @@ def get_generic_type(dirent):
     return generic.RegularFile
     
     
-def genericize(dirent):
+def genericize(path, dirent):
     return generic.DirectoryEntry(dirent.cFileName,
+                                  path,
                                   get_generic_type(dirent),
                                   -1)
 
 def listdir(dirname):
-    return (genericize(entry) for entry in readdir_gen(dirname))
+    return (genericize(dirname, entry) for entry in readdir_gen(dirname))

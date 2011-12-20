@@ -1,13 +1,17 @@
+import os.path
+
 
 class DirectoryEntry(object):
-    def __init__(self, name, type, inode, **kwargs):
+    def __init__(self, name, path, type, inode, **kwargs):
+        self.__path = path
         self.__name = name
         self.__type = type
         self.__inode = inode
         self.__attrs = kwargs
 
     def __str__(self):
-        return '<%s, a %s @ %s>' % (self.__name, self.__type, str(self.__inode))
+        return '<%s, a %s>' % (os.path.join(self.__path, self.__name),
+                                    self.__type)
     def __repr__(self):
         return self.__str__()
 
