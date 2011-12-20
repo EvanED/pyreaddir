@@ -77,17 +77,46 @@ def readdir_gen(directory):
         raise Exception('Not found')
 
     while True:
-        yield presult.contents.cFileName
+        yield presult.contents
         res = find_next_file_w(hFind, presult)
         if not res:
             break
 
 
+FILE_ATTRIBUTE_ARCHIVE    = 0x20
+FILE_ATTRIBUTE_COMPRESSED = 0x800
+FILE_ATTRIBUTE_DEVICE     = 0x40
+FILE_ATTRIBUTE_DIRECTORY  = 0x10
+FILE_ATTRIBUTE_ENCRYPTED  = 0x4000
+FILE_ATTRIBUTE_HIDDEN     = 0x2
+FILE_ATTRIBUTE_NORMAL     = 0x80
+FILE_ATTRIBUTE_NOT_CONTENT_INDEXED = 0x2000
+FILE_ATTRIBUTE_OFFLINE    = 0x1000
+FILE_ATTRIBUTE_READONLY   = 0x1
+FILE_ATTRIBUTE_REPARSE_POINT = 0x400
+FILE_ATTRIBUTE_SPARSE_FILE = 0x200
+FILE_ATTRIBUTE_SYSTEM     = 0x4
+FILE_ATTRIBUTE_TEMPORARY  = 0x100
+FILE_ATTRIBUTE_VIRTUAL    = 0x10000
+
+def get_generic_type(dirent):
+    attrs = dirent.dwFileAttributes
+    if attrs & FILE_ATTRIBUTE_DIRECTORY:
+        return generic.Directory
+    if attrs & FILE_ATTRIBUTE_DEVICE:
+        return generic.BlockDevice  #TODO?
+    # detect link?
+    # add new reparse pt
+    # named pipes and sockets
+    if attrs & FILE_ATTRIBUTE_VIRTUAL:
+        return generic.UnknownType
+    return generic.RegularFile
+    
     
 def genericize(dirent):
     return generic.DirectoryEntry(dirent.cFileName,
-                                  dt_type_values[dirent.d_type][1],
-                                  dirent.d_ino)
+                                  get_generic_type(dirent),
+                                  -1)
 
 def listdir(dirname):
     return (genericize(entry) for entry in readdir_gen(dirname))
