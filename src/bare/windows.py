@@ -99,14 +99,28 @@ FILE_ATTRIBUTE_SYSTEM     = 0x4
 FILE_ATTRIBUTE_TEMPORARY  = 0x100
 FILE_ATTRIBUTE_VIRTUAL    = 0x10000
 
+IO_REPARSE_TAG_DFS     = 0x8000000A
+IO_REPARSE_TAG_DFSR    = 0x80000012
+IO_REPARSE_TAG_HSM     = 0xC0000004
+IO_REPARSE_TAG_HSM2    = 0x80000006
+IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003
+IO_REPARSE_TAG_SIS     = 0x80000007
+IO_REPARSE_TAG_SYMLINK = 0xA000000C
+
+
 def get_generic_type(dirent):
     attrs = dirent.dwFileAttributes
     if attrs & FILE_ATTRIBUTE_DIRECTORY:
         return generic.Directory
     if attrs & FILE_ATTRIBUTE_DEVICE:
         return generic.BlockDevice  #TODO?
-    # detect link?
-    # add new reparse pt
+    if attrs & FILE_ATTRIBUTE_REPARSE_POINT:
+        tag = dirent.dwReserved0
+        if tag == IO_REPARSE_TAG_SYMLINK:
+            return generic.SymbolicLink
+        if tag == IO_REPARSE_TAG_MOUNT_POINT:
+            return generic.Directory
+        return generic.UnknownType
     # named pipes and sockets
     if attrs & FILE_ATTRIBUTE_VIRTUAL:
         return generic.UnknownType
