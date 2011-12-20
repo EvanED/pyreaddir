@@ -45,6 +45,21 @@ class WIN32_FIND_DATAW(Structure):
                 ]
 
 
+# FINDEX_INFO_LEVELS enum
+FindExInfoStandard = 0
+FindExInfoBasic    = 1  # Needs Server 2008 R2 or Win 7
+
+# FINDEX_SEARCH_OPS enum
+FindExSearchNameMatch          = 0
+FindExSearchLimitToDirectories = 1
+FindExSearchLimitToDevices     = 2
+
+# additional flags
+FIND_FIRST_EX_CASE_SENSITIVE = 1
+FIND_FIRST_EX_LARGE_FETCH    = 2  # Needs Server 2008 R2 or Win 7
+
+
+
 # HANDLE WINAPI FindFirstFileW(
 #   __in   LPCWSTR lpFileName,
 #   __out  LPWIN32_FIND_DATAW lpFindFileData
@@ -54,6 +69,30 @@ find_first_file_w = ctypes.windll.kernel32.FindFirstFileW
 
 find_first_file_w.argtypes = [win.LPCWSTR, POINTER(WIN32_FIND_DATAW)]
 find_first_file_w.restype = win.HANDLE
+
+# HANDLE WINAPI FindFirstFileEx(
+#   __in        LPCTSTR lpFileName,
+#   __in        FINDEX_INFO_LEVELS fInfoLevelId,
+#   __out       LPVOID lpFindFileData,
+#   __in        FINDEX_SEARCH_OPS fSearchOp,
+#   __reserved  LPVOID lpSearchFilter,
+#   __in        DWORD dwAdditionalFlags
+# );
+
+find_first_file_exw = ctypes.windll.kernel32.FindFirstFileExW
+
+find_first_file_exw.argtypes = [win.LPCWSTR,
+                                c_uint, # FINDEX_INFO_LEVELS
+                                POINTER(WIN32_FIND_DATAW),  # technically I'm cheating and it's 
+                                                            # LPVOID but that's basically reserved
+                                                            # for future expansion
+                                c_uint, # FINDEX_SEARCH_OPS
+                                win.LPVOID,
+                                win.DWORD]
+
+find_first_file_exw.restype = win.HANDLE
+
+
 
 # BOOL WINAPI FindNextFile(
 #   __in   HANDLE hFindFile,
