@@ -8,6 +8,8 @@ class DirectoryEntry(object):
 
     def __str__(self):
         return '<%s, a %s @ %s>' % (self.__name, self.__type, str(self.__inode))
+    def __repr__(self):
+        return self.__str__()
 
 
 class FileType(object):
