@@ -11,6 +11,12 @@ class DirectoryEntry(object):
     def __repr__(self):
         return self.__str__()
 
+    def is_directory(self):
+        return self.__type == Directory
+
+    def name(self):
+        return self.__name
+
 
 class FileType(object):
     def __init__(self, desc):
