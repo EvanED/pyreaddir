@@ -1,5 +1,22 @@
-from ctypes import *
 import generic
+
+from ctypes import *
+import ctypes
+import ctypes.wintypes as win
+
+
+_dword_type = win.DWORD
+
+class FILETIME(Structure):
+    """typedef struct _FILETIME {
+           DWORD dwLowDateTime;
+           DWORD dwHighDateTime;
+       } FILETIME, *PFILETIME;"""
+
+    _fields_ = [("dwLowDateTime",  _dword_type),
+                ("dwHighDateTime", _dword_type)
+                ]
+
 
 class WIN32_FIND_DATAW(Structure):
     """typedef struct _WIN32_FIND_DATAW {
@@ -15,112 +32,60 @@ class WIN32_FIND_DATAW(Structure):
            WCHAR  cAlternateFileName[ 14 ];
        } WIN32_FIND_DATAW;"""
 
-    _fields_ = [("dwFileAttributes", c_u),
-                ("ftCreationTime",      ),
-                ("ftLastAccessTime",    ),
-                ("ftLastWriteTime",     ),
-                ("nFileSizeHigh",       ),
-                ("nFileSize
-
-class DIRENT(Structure):
-    """struct dirent {
-           // on my machine, both ino_t and off_t are 8 bytes, so c_ulonglong
-           ino_t          d_ino;       /* inode number */
-           off_t          d_off;       /* offset to the next dirent */
-           // c_ushort
-           unsigned short d_reclen;    /* length of this record */
-           // c_ubyte
-           unsigned char  d_type;      /* type of file */
-           // 
-           char           d_name[256]; /* filename */
-        };"""
-
-    _fields_ = [("d_ino",    c_ulonglong),
-                ("d_off",    c_ulonglong),
-                ("d_reclen", c_ushort),
-                ("d_type",   c_ubyte),
-                ("d_name",   c_char * 256)]
-
-    def __str__(self):
-        global dt_type_values
-        return '<' + self.d_name + ', type: ' + dt_type_values[self.d_type][0] + '>'
-
-_libc = CDLL("libc.so.6", use_errno=True)
-
-# DIR *opendir(const char *name);
-_libc.opendir.argtypes = [c_char_p]
-_libc.opendir.restype = POINTER(DIR)
-
-# struct dirent *readdir(DIR *dir);
-_libc.readdir.argtypes = [POINTER(DIR)]
-_libc.readdir.restype = POINTER(DIRENT)
-
-# int closedir(DIR *dir);
-_libc.closedir.argtypes = [POINTER(DIR)]
+    _fields_ = [("dwFileAttributes",   _dword_type),
+                ("ftCreationTime",     FILETIME),
+                ("ftLastAccessTime",   FILETIME),
+                ("ftLastWriteTime",    FILETIME),
+                ("nFileSizeHigh",      _dword_type),
+                ("nFileSizeLow",       _dword_type),
+                ("dwReserved0",        _dword_type),
+                ("dwReserved1",        _dword_type),
+                ("cFileName",          c_wchar * 260),
+                ("cAlternateFileName", c_wchar * 14)
+                ]
 
 
-opendir = _libc.opendir
-readdir = _libc.readdir
-closedir = _libc.closedir
+# HANDLE WINAPI FindFirstFileW(
+#   __in   LPCWSTR lpFileName,
+#   __out  LPWIN32_FIND_DATAW lpFindFileData
+# );
 
+find_first_file_w = ctypes.windll.kernel32.FindFirstFileW
 
-dt_type_values = {
-    0:  ("DT_UNKNOWN", generic.UnknownType),
-    1:  ("DT_FIFO", generic.NamedPipe),
-    2:  ("DT_CHR",  generic.CharacterDevice),
-    4:  ("DT_DIR",  generic.Directory),
-    6:  ("DT_BLK",  generic.BlockDevice),
-    8:  ("DT_REG",  generic.RegularFile),
-    10: ("DT_LNK",  generic.SymbolicLink),
-    12: ("DT_SOCK", generic.Socket),
-    14: ("DT_WHT",  generic.Whiteout)
-    }
+find_first_file_w.argtypes = [win.LPCWSTR, POINTER(WIN32_FIND_DATAW)]
+find_first_file_w.restype = win.HANDLE
 
+# BOOL WINAPI FindNextFile(
+#   __in   HANDLE hFindFile,
+#   __out  LPWIN32_FIND_DATA lpFindFileData
+# );
 
-#example code from opengroup
-"""
-dirp = opendir(".");
+find_next_file_w = ctypes.windll.kernel32.FindNextFileW
 
-while (dirp) {
-    errno = 0;
-    if ((dp = readdir(dirp)) != NULL) {
-        if (strcmp(dp->d_name, name) == 0) {
-            closedir(dirp);
-            return FOUND;
-        }
-    } else {
-        if (errno == 0) {
-            closedir(dirp);
-            return NOT_FOUND;
-        }
-        closedir(dirp);
-        return READ_ERROR;
-    }
-}
-"""
+find_next_file_w.argtypes = [win.HANDLE, POINTER(WIN32_FIND_DATAW)]
+find_next_file_w.restype = win.BOOL
+
 
 # TODO: context manager
 def readdir_gen(directory):
-    dirp = opendir(directory)
-    if dirp == None:
-        raise Exception(get_errno())
+    directory = unicode(directory + '\\*')
+    result = WIN32_FIND_DATAW()
+    presult = pointer(result)
+    hFind = find_first_file_w(directory, presult)
+    
+    if not hFind:
+        raise Exception('Not found')
 
     while True:
-        dirent = readdir(dirp)
+        yield presult.contents.cFileName
+        res = find_next_file_w(hFind, presult)
+        if not res:
+            break
 
-        if not dirent:
-            if get_errno() == 0:
-                closedir(dirp)
-                return
-            else:
-                raise Exception(get_errno())
-
-        #print dirent.contents
-        yield dirent.contents
 
     
 def genericize(dirent):
-    return generic.DirectoryEntry(dirent.d_name,
+    return generic.DirectoryEntry(dirent.cFileName,
                                   dt_type_values[dirent.d_type][1],
                                   dirent.d_ino)
 
