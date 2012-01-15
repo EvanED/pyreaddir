@@ -1,6 +1,6 @@
 from distutils.core import setup, Extension
 
-module1 = Extension('readdir_c',
+module1 = Extension('pyreaddir_c',
                     sources = ['readdir.c'])
 
 setup (name = 'PyReaddir_c',
