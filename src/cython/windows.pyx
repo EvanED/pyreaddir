@@ -68,7 +68,41 @@ cdef extern from "windows.h" nogil:
     #   __in   HANDLE hFindFile,
     #   __out  LPWIN32_FIND_DATA lpFindFileData
     # );
-    BOOL FindNextFile(HANDLE hFindFile,
-                      LPWIN32_FIND_DATAW lpFindFileData)
+    BOOL FindNextFileW(HANDLE hFindFile,
+                       LPWIN32_FIND_DATAW lpFindFileData)
 
     
+
+# TODO: context manager
+def readdir_gen(py_directory):
+    py_directory = unicode(py_directory + '\\*')
+    cdef wchar_t* directory = NULL #FIXME = py_directory
+    cdef WIN32_FIND_DATAW result
+    cdef HANDLE hFind
+    #hFind = find_first_file_w(directory, presult)
+    hFind = FindFirstFileExW(directory,
+                             FindExInfoBasic,
+                             &result,
+                             FindExSearchNameMatch,
+                             NULL,
+                             FIND_FIRST_EX_LARGE_FETCH)
+    
+    if not hFind:
+        raise Exception('Not found')
+
+    while True:
+        yield result
+        res = FindNextFileW(hFind, &result)
+        if not res:
+            break
+
+def FILETIME_to_datetime(FILETIME* ft):
+    low = dwLowDateTime
+    high = dwHighDateTime
+    low = low << (sizeof(FILETIME) * 8)
+
+    datetime.timedelta()
+
+    ctypedef struct FILETIME:
+        DWORD dwLowDateTime
+        DWORD dwHighDateTime
