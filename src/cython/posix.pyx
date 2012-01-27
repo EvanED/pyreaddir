@@ -29,14 +29,24 @@ cdef extern from "dirent.h":
         DT_SOCK
         DT_WHT
 
+cdef set_errno(int a):
+     pass
+
+cdef int get_errno():
+     return 0
+
+cdef genericize_dirent(dirent* dirent):
+     return {}
 
 cdef readdir_gen(directory):
-    DIR* dirp = opendir(directory)
+    cdef DIR* dirp = opendir(directory)
+    cdef dirent* dirent
     if dirp == NULL:
-        raise Exception(get_errno())
+        raise Exception() #get_errno())
 
     while True:
-        dirent* dirent = readdir(dirp)
+        set_errno(0)
+        dirent = readdir(dirp)
 
         if not dirent:
             if get_errno() == 0:
@@ -45,5 +55,5 @@ cdef readdir_gen(directory):
             else:
                 raise Exception(get_errno())
 
-        #print dirent.contents
-        yield dirent.contents
+        yield genericize_dirent(dirent)
+
