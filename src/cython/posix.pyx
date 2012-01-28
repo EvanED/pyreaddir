@@ -30,30 +30,40 @@ cdef extern from "dirent.h":
         DT_WHT
 
 cdef set_errno(int a):
-     pass
+    pass
 
 cdef int get_errno():
-     return 0
+    return 0
 
 cdef genericize_dirent(dirent* dirent):
-     return {}
+    return {}
 
-cdef readdir_gen(directory):
-    cdef DIR* dirp = opendir(directory)
-    cdef dirent* dirent
-    if dirp == NULL:
-        raise Exception() #get_errno())
+cdef class DirectoryIterator:
+    cdef DIR* handle
 
-    while True:
+    def __cinit__(self, dir_name):
+        self.handle = opendir(dir_name)
+        if self.handle == NULL:
+            raise Exception(get_errno())
+
+    def __del__(self):
+        self.close()
+
+    cpdef next(self):
+        if self.handle == NULL:
+            raise Exception()
         set_errno(0)
-        dirent = readdir(dirp)
-
-        if not dirent:
-            if get_errno() == 0:
-                closedir(dirp)
-                return
+        cdef dirent* entry = readdir(self.handle)
+        if entry == NULL:
+            if get_errno() == 0: 
+                raise Exception() # end of stream
             else:
                 raise Exception(get_errno())
+        else:
+            return genericize_dirent(entry)
 
-        yield genericize_dirent(dirent)
+    def close(self):
+        if dir != NULL:
+            closedir(self.handle)
+            dir = NULL
 
