@@ -36,7 +36,31 @@ cdef int get_errno():
     return 0
 
 cdef genericize_dirent(dirent* dirent):
-    return {}
+    return {'name': dirent.d_name,
+            'type': genericize_d_type(dirent.d_type),
+            'inode': dirent.d_ino}
+
+cdef genericize_d_type(int type):
+    if type == DT_UNKNOWN:
+        return 'UnknownType'
+    if type == DT_FIFO:
+        return 'NamedPipe'
+    if type == DT_CHR:
+        return 'CharacterDevice'
+    if type == DT_DIR:
+        return 'Directory'
+    if type == DT_BLK:
+        return 'Blockdevice'
+    if type == DT_REG:
+        return 'RegularFile'
+    if type == DT_LNK:
+        return 'SymbolicLink'
+    if type == DT_SOCK:
+        return 'Socket'
+    if type == DT_WHT:
+        return 'Whiteout'
+    return 'ReallyUnknown'
+    
 
 cdef class DirectoryIterator:
     cdef DIR* handle
