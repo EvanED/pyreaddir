@@ -84,7 +84,7 @@ cdef class DirectoryIterator:
         cdef dirent* entry = readdir(self.handle)
         if entry == NULL:
             if get_errno() == 0: 
-                raise Exception() # end of stream
+                raise StopIteration()
             else:
                 raise Exception(get_errno())
         else:
