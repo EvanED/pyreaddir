@@ -1,3 +1,6 @@
+cdef extern from "errno.h":
+    int errno
+
 cdef extern from "dirent.h":
     ctypedef int ino_t
     ctypedef int off_t
@@ -30,10 +33,11 @@ cdef extern from "dirent.h":
         DT_WHT
 
 cdef set_errno(int a):
-    pass
+    global errno
+    errno = 0
 
 cdef int get_errno():
-    return 0
+    return errno
 
 cdef genericize_dirent(dirent* dirent):
     return {'name': dirent.d_name,
