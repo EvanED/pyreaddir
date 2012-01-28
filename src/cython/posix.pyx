@@ -87,7 +87,7 @@ cdef class DirectoryIterator:
             return genericize_dirent(entry)
 
     def close(self):
-        if dir != NULL:
+        if self.handle != NULL:
             closedir(self.handle)
-            dir = NULL
+            self.handle = NULL
 
