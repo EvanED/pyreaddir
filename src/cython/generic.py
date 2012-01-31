@@ -2,11 +2,10 @@ import os.path
 
 
 class DirectoryEntry(object):
-    def __init__(self, name, path, type, inode, **kwargs):
+    def __init__(self, name, path, type, **kwargs):
         self.__path = path
         self.__name = name
         self.__type = type
-        self.__inode = inode
         self.__attrs = kwargs
 
     def __str__(self):

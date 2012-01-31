@@ -2,12 +2,9 @@ import tempfile
 import os
 import shutil
 
-def DirectoryEntry(a,b,c):
-    pass
-RegularFile = 0
-Directory = 0
-SymbolicLink = 0
-NamedPipe = 0
+from generic import (DirectoryEntry, RegularFile, Directory,
+                     SymbolicLink, NamedPipe)
+
 
 def setUpModule():
     global test_tree
