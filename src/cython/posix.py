@@ -6,6 +6,14 @@ def create_glob_matcher(glob):
         return fnmatch.fnmatch(entry.name(), glob)
     return matches
 
+
+def every_predicate_matches(predicates, item):
+    for p in predicates:
+        if not p(item):
+            return False
+    return True
+
+
 def readdir(directory_name, glob="*", extra_filters=[], **kwargs):
     if len(kwargs) != 0:
         # Warn unsupported args. Specifically check for 'transaction'
@@ -17,10 +25,9 @@ def readdir(directory_name, glob="*", extra_filters=[], **kwargs):
 
     iter = readdir_bare_posix.DirectoryIterator(directory_name)
 
-    for entry in iter:
-        yield entry
-
-    raise StopIteraton()
+    return (entry
+            for entry in iter
+            if every_predicate_matches(extra_filters, entry))
 
 
 for item in readdir("."):
