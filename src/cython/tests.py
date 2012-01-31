@@ -1,3 +1,14 @@
+import tempfile
+import os
+import shutil
+
+def DirectoryEntry(a,b,c):
+    pass
+RegularFile = 0
+Directory = 0
+SymbolicLink = 0
+NamedPipe = 0
+
 def setUpModule():
     global test_tree
     test_tree = set_up_workspace()
@@ -14,7 +25,7 @@ def set_up_workspace():
     root = tempfile.mkdtemp(prefix="pyreaddir.unittests.")
     test_tree["root dir"] = root
     
-    // Create a normal file
+    # Create a normal file
     normal = os.path.join(root, "normal-file")
     f = open(normal, "w")
     f.close()
@@ -24,7 +35,7 @@ def set_up_workspace():
                                          RegularFile)
     test_tree["contents"].append(test_tree["normal"])
 
-    // Create a directory
+    # Create a directory
     test_dir = os.path.join(root, "directory")
     os.mkdir(test_dir)
 
@@ -34,8 +45,8 @@ def set_up_workspace():
     test_tree["contents"].append(test_tree["directory"])
 
     if True:
-        // (Just indent to show structure)
-        // Create a file *in* that directory:
+        # (Just indent to show structure)
+        # Create a file *in* that directory:
         inner = os.path.join(test_dir, "normal-file")
         f = open(normal, "w")
         f.close()
@@ -43,17 +54,17 @@ def set_up_workspace():
                                                         inner,
                                                         RegularFile)
 
-    // Create a named pipe
+    # Create a named pipe
     fifo = os.path.join(root, "fifo")
     os.mkfifo(fifo)
 
     test_tree["named pipe"] = DirectoryEntry("fifo", fifo, NamedPipe) 
     test_tree["contents"].append(test_tree["named pipe"])
 
-    // Create devices?!
+    # Create devices?!
 
-    // Create symlink to directory
-    link_dir = os.path.join(root, "symlink-to-dir"d)
+    # Create symlink to directory
+    link_dir = os.path.join(root, "symlink-to-dir")
     os.symlink(test_dir, link_dir)
 
     test_tree["directory symlink"] = DirectoryEntry("symlink-to-dir",
@@ -61,7 +72,7 @@ def set_up_workspace():
                                                     SymbolicLink)
     test_tree["contents"].append(test_tree["directory symlink"])
 
-    // Create symlink to file
+    # Create symlink to file
     link_file = os.path.join(root, "symlink-to-file")
     os.symlink(normal, link_file)
 
@@ -70,9 +81,9 @@ def set_up_workspace():
                                                SymbolicLink)
     test_tree["contents"].append(test_tree["file symlink"])
 
-    // Create socket?!
+    # Create socket?!
 
-    // Create whiteout?!
+    # Create whiteout?!
 
     return test_tree
 
@@ -86,3 +97,15 @@ def remove_workspace(workspace):
     assert name.startswith("pyreaddir.unittests.")
 
     shutil.rmtree(root)
+
+
+
+import unittest
+class TestBlah(unittest.TestCase):
+    def test_blah(self):
+        pass
+        #raw_input()
+
+if __name__ == '__main__':
+    unittest.main()
+
