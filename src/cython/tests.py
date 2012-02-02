@@ -109,8 +109,11 @@ def remove_workspace(workspace):
 import unittest
 class TestBlah(unittest.TestCase):
     def test_blah(self):
-        l = set(readdir(test_tree["root dir"]))
-        self.assertEqual(l, test_tree["contents"])
+        actual = list(readdir(test_tree["root dir"]))
+        actual.sort()
+        expected = list(test_tree["contents"])
+        expected.sort()
+        self.assertEqual(actual, expected)
 
 
 if __name__ == '__main__':
