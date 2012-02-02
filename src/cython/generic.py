@@ -37,3 +37,8 @@ NamedPipe    = FileType("named pipe")
 Socket       = FileType("socket")
 Whiteout     = FileType("whiteout")
 UnknownType  = FileType("unknown")
+
+def _get_file_type_from_string(str):
+    ty = globals()[str]
+    #assert 
+    return ty

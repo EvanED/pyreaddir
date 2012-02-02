@@ -1,5 +1,6 @@
 import readdir_bare_posix
 import fnmatch
+import generic
 
 def create_glob_matcher(glob):
     def matches(entry):
@@ -12,6 +13,13 @@ def every_predicate_matches(predicates, item):
         if not p(item):
             return False
     return True
+
+
+def genericize(entry_dict, path):
+    return generic.DirectoryEntry(entry_dict["name"],
+                                  path,
+                                  generic._get_file_type_from_string(entry_dict["type"]),
+                                  inode = entry_dict["inode"])
 
 
 def readdir(directory_name, glob="*", extra_filters=[], **kwargs):
@@ -27,7 +35,7 @@ def readdir(directory_name, glob="*", extra_filters=[], **kwargs):
 
     print dir(iter)
 
-    return (entry
+    return (genericize(entry, directory_name)
             for entry in iter
             if every_predicate_matches(extra_filters, entry))
 
