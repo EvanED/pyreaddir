@@ -84,6 +84,13 @@ def set_up_workspace():
 
     # Create whiteout?!
 
+    # Add . and ..
+    test_tree["dot"].append(DirectoryEntry(".", root, Directory))
+    test_tree["contents"].append(test_tree["dot"])
+
+    test_tree["dotdot"].append(DirectoryEntry("..", root, Directory))
+    test_tree["contents"].append(test_tree["dotdot"])
+
     return test_tree
 
 
