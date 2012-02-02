@@ -4,7 +4,9 @@ import shutil
 
 from generic import (DirectoryEntry, RegularFile, Directory,
                      SymbolicLink, NamedPipe)
+from posix2 import readdir
 
+test_tree = None
 
 def setUpModule():
     global test_tree
@@ -100,8 +102,8 @@ def remove_workspace(workspace):
 import unittest
 class TestBlah(unittest.TestCase):
     def test_blah(self):
-        pass
-        #raw_input()
+        l = list(readdir(test_tree["root dir"]))
+        print l
 
 if __name__ == '__main__':
     unittest.main()
