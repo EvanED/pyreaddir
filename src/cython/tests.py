@@ -46,8 +46,9 @@ def set_up_workspace():
     if True:
         # (Just indent to show structure)
         # Create a file *in* that directory:
-        inner = os.path.join(test_dir, "normal-file")
-        f = open(normal, "w")
+        inner = os.path.join(test_dir, "inner-normal-file")
+        print "-->", inner
+        f = open(inner, "w")
         f.close()
         test_tree["file in directory"] = DirectoryEntry("normal-file",
                                                         inner,
