@@ -77,7 +77,10 @@ cdef class DirectoryIterator:
     def __del__(self):
         self.close()
 
-    cpdef next(self):
+    def __iter__(self):
+        return self
+
+    def __next__(self):
         if self.handle == NULL:
             raise Exception()
         set_errno(0)
