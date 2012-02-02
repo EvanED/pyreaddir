@@ -9,9 +9,10 @@ class DirectoryEntry(object):
         self.__attrs = kwargs
 
     def __str__(self):
-        return '<%s in %s, a %s>' % (self.__name,
-                                     self.__path,
-                                     self.__type)
+        return '<%s in %s, a %s, args %s>' % (self.__name,
+                                              self.__path,
+                                              self.__type,
+                                              str(self.__attrs))
     def __repr__(self):
         return self.__str__()
 
