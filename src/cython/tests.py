@@ -19,7 +19,7 @@ def tearDownModule():
 
 def set_up_workspace():
     test_tree = {}
-    test_tree["contents"] = []
+    test_tree["contents"] = set()
 
     root = tempfile.mkdtemp(prefix="pyreaddir.unittests.")
     test_tree["root dir"] = root
@@ -32,7 +32,7 @@ def set_up_workspace():
     test_tree["normal"] = DirectoryEntry("normal-file",
                                          normal,
                                          RegularFile)
-    test_tree["contents"].append(test_tree["normal"])
+    test_tree["contents"].add(test_tree["normal"])
 
     # Create a directory
     test_dir = os.path.join(root, "directory")
@@ -41,7 +41,7 @@ def set_up_workspace():
     test_tree["directory"] = DirectoryEntry("directory",
                                             test_dir,
                                             Directory)
-    test_tree["contents"].append(test_tree["directory"])
+    test_tree["contents"].add(test_tree["directory"])
 
     if True:
         # (Just indent to show structure)
@@ -58,7 +58,7 @@ def set_up_workspace():
     os.mkfifo(fifo)
 
     test_tree["named pipe"] = DirectoryEntry("fifo", fifo, NamedPipe) 
-    test_tree["contents"].append(test_tree["named pipe"])
+    test_tree["contents"].add(test_tree["named pipe"])
 
     # Create devices?!
 
@@ -69,7 +69,7 @@ def set_up_workspace():
     test_tree["directory symlink"] = DirectoryEntry("symlink-to-dir",
                                                     link_dir,
                                                     SymbolicLink)
-    test_tree["contents"].append(test_tree["directory symlink"])
+    test_tree["contents"].add(test_tree["directory symlink"])
 
     # Create symlink to file
     link_file = os.path.join(root, "symlink-to-file")
@@ -78,18 +78,18 @@ def set_up_workspace():
     test_tree["file symlink"] = DirectoryEntry("symlink-to-file",
                                                link_file,
                                                SymbolicLink)
-    test_tree["contents"].append(test_tree["file symlink"])
+    test_tree["contents"].add(test_tree["file symlink"])
 
     # Create socket?!
 
     # Create whiteout?!
 
     # Add . and ..
-    test_tree["dot"].append(DirectoryEntry(".", root, Directory))
-    test_tree["contents"].append(test_tree["dot"])
+    test_tree["dot"] = DirectoryEntry(".", root, Directory)
+    test_tree["contents"].add(test_tree["dot"])
 
-    test_tree["dotdot"].append(DirectoryEntry("..", root, Directory))
-    test_tree["contents"].append(test_tree["dotdot"])
+    test_tree["dotdot"] = DirectoryEntry("..", root, Directory)
+    test_tree["contents"].add(test_tree["dotdot"])
 
     return test_tree
 
@@ -109,8 +109,9 @@ def remove_workspace(workspace):
 import unittest
 class TestBlah(unittest.TestCase):
     def test_blah(self):
-        l = list(readdir(test_tree["root dir"]))
-        print l
+        l = set(readdir(test_tree["root dir"]))
+        self.assertEqual(l, test_tree["contents"])
+
 
 if __name__ == '__main__':
     unittest.main()
