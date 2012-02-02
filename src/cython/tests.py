@@ -18,6 +18,9 @@ def tearDownModule():
 
 
 def set_up_workspace():
+    def ino(f):
+        return os.lstat(f).st_ino
+
     test_tree = {}
     test_tree["contents"] = set()
 
@@ -30,8 +33,9 @@ def set_up_workspace():
     f.close()
 
     test_tree["normal"] = DirectoryEntry("normal-file",
-                                         normal,
-                                         RegularFile)
+                                         root,
+                                         RegularFile,
+                                         inode=ino(normal))
     test_tree["contents"].add(test_tree["normal"])
 
     # Create a directory
@@ -39,26 +43,27 @@ def set_up_workspace():
     os.mkdir(test_dir)
 
     test_tree["directory"] = DirectoryEntry("directory",
-                                            test_dir,
-                                            Directory)
+                                            root,
+                                            Directory,
+                                            inode=ino(test_dir))
     test_tree["contents"].add(test_tree["directory"])
 
     if True:
         # (Just indent to show structure)
         # Create a file *in* that directory:
         inner = os.path.join(test_dir, "inner-normal-file")
-        print "-->", inner
         f = open(inner, "w")
         f.close()
-        test_tree["file in directory"] = DirectoryEntry("normal-file",
-                                                        inner,
-                                                        RegularFile)
+        test_tree["file in directory"] = DirectoryEntry("inner-normal-file",
+                                                        test_dir,
+                                                        RegularFile,
+                                                        inode=ino(inner))
 
     # Create a named pipe
     fifo = os.path.join(root, "fifo")
     os.mkfifo(fifo)
 
-    test_tree["named pipe"] = DirectoryEntry("fifo", fifo, NamedPipe) 
+    test_tree["named pipe"] = DirectoryEntry("fifo", root, NamedPipe, inode=ino(fifo))
     test_tree["contents"].add(test_tree["named pipe"])
 
     # Create devices?!
@@ -68,8 +73,9 @@ def set_up_workspace():
     os.symlink(test_dir, link_dir)
 
     test_tree["directory symlink"] = DirectoryEntry("symlink-to-dir",
-                                                    link_dir,
-                                                    SymbolicLink)
+                                                    root,
+                                                    SymbolicLink,
+                                                    inode=ino(link_dir))
     test_tree["contents"].add(test_tree["directory symlink"])
 
     # Create symlink to file
@@ -77,8 +83,9 @@ def set_up_workspace():
     os.symlink(normal, link_file)
 
     test_tree["file symlink"] = DirectoryEntry("symlink-to-file",
-                                               link_file,
-                                               SymbolicLink)
+                                               root,
+                                               SymbolicLink,
+                                               inode=ino(link_file))
     test_tree["contents"].add(test_tree["file symlink"])
 
     # Create socket?!
@@ -86,10 +93,10 @@ def set_up_workspace():
     # Create whiteout?!
 
     # Add . and ..
-    test_tree["dot"] = DirectoryEntry(".", root, Directory)
+    test_tree["dot"] = DirectoryEntry(".", root, Directory, inode=ino(root))
     test_tree["contents"].add(test_tree["dot"])
 
-    test_tree["dotdot"] = DirectoryEntry("..", root, Directory)
+    test_tree["dotdot"] = DirectoryEntry("..", root, Directory, inode=ino(os.path.join(root, "..")))
     test_tree["contents"].add(test_tree["dotdot"])
 
     return test_tree
