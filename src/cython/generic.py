@@ -32,6 +32,7 @@ class DirectoryEntry(object):
             assert self.__dict__ == other.__dict__
             return 0
 
+    __hash__ = None
 
 class FileType(object):
     def __init__(self, desc):
