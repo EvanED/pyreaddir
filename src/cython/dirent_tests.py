@@ -45,6 +45,11 @@ class TestDirectoryEntry(unittest.TestCase):
         self.assertNotEqual(first, second)
         self.assertNotEqual(second, first)
 
+    def test_is_not_hashable_because_it_is_mutable(self):
+        first = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7)
+        import collections
+        self.assertFalse(isinstance(first, collections.Hashable))
+
 if __name__ == '__main__':
     unittest.main()
 
