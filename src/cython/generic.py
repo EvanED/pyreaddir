@@ -22,6 +22,16 @@ class DirectoryEntry(object):
     def name(self):
         return self.__name
 
+    def __cmp__(self, other):
+        assert type(other) == DirectoryEntry
+        if (self.__dict__ < other.__dict__):
+            return -1
+        elif (self.__dict__ > other.__dict__):
+            return 1
+        else:
+            assert self.__dict__ == other.__dict__
+            return 0
+
 
 class FileType(object):
     def __init__(self, desc):
