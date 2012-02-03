@@ -32,7 +32,15 @@ class DirectoryEntry(object):
             assert self.__dict__ == other.__dict__
             return 0
 
-    __hash__ = None
+    def __hash__(self):
+        ino = self.__attrs["inode"]
+        if ino:
+            assert type(ino) == int or type(ino) == long
+            return ino
+        else:
+            name = self.__name
+            path = self.__path
+            return hash(name + path)
 
 class FileType(object):
     def __init__(self, desc):
