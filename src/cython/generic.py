@@ -51,3 +51,4 @@ def _get_file_type_from_string(str):
     return ty
 
 print RegularFile
+print type(DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7L))
