@@ -18,20 +18,20 @@ class Tests(unittest.TestCase):
         self.assertEqual(7, self.e.inode)
 
     def test_cannot_change_name(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaisesRegexp(TypeError, ".*immutable.*"):
             self.e.name = 7
 
     def test_cannot_change_inode(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaisesRegexp(TypeError, ".*immutable.*"):
             self.e.inode = 6
 
     def test_cannot_create_attribute(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaisesRegexp(TypeError, ".*immutable.*"):
             self.e.foobar = 7
 
     def test_cannot_access_dict(self):
-        with self.assertRaises(TypeError):
-            print self.e.__dict__
+        with self.assertRaisesRegexp(TypeError, ".*immutable.*"):
+            d = self.e.__dict__
 
 
         
