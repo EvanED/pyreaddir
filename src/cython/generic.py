@@ -32,7 +32,8 @@ class DirectoryEntry(object):
     def __repr__(self):
         return self.__str__()
 
-    __setattr__ = None
+    def __setattr__(self, attr, value):
+        raise TypeError("DirectoryEntry pretends to be immutable")
 
     def is_directory(self):
         return self.kind == Directory
