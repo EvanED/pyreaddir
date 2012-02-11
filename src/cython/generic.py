@@ -2,40 +2,36 @@ import os.path
 
 import collections
 
-DirectoryEntryBase = collections.namedtuple("DirectoryEntryBase",
-                                            ["name", "path", "kind"])
 FileTypeBase = collections.namedtuple("FileTypeBase",
                                       ["description"])
 
-class DirectoryEntry(DirectoryEntryBase):
-    __slots__ = ()
+class DirectoryEntry(object):
+    def __init__(self, name, path, kind, **kwargs):
+        object.__setattr__(self, "name", name)
+        object.__setattr__(self, "path", path)
+        object.__setattr__(self, "kind", kind)
 
-    def __new__(klass, name, path, kind, **kwargs):
-        extras = sorted(kwargs.iteritems(), key=lambda pair: pair[0])
-        keys = [k for (k,v) in extras]
-        values = [v for (k,v) in extras]
+        for (k,v) in kwargs.iteritems():
+            object.__setattr__(self, k, v)
 
-        fields = ["name", "path", "kind", "private_base_"] + keys
-        type_name = "__".join(keys)
+        t = (name, path, kind, frozenset(kwargs.iteritems()))
+        object.__setattr__(self, "_the_hash", hash(t))
 
-        try:
-            base = collections.namedtuple(type_name, fields)
-        except ValueError as e:
-            raise e
-
-        return base.__new__(klass, name, path, base, kind, *values)
 
     def __str__(self):
         return '<%s in %s, a %s, args %s>' % (self.name,
                                               self.path,
-                                              self.kind, '')
+                                              self.kind,'')
     def __repr__(self):
         return self.__str__()
 
-    __iter__ = None
+    __setattr__ = None
 
     def is_directory(self):
         return self.kind == Directory
+
+    def __getattr__(self, attrname):
+        return self.private_base_.__getattribute__(self, attrname)
 
 
 class FileType(FileTypeBase):
