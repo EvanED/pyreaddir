@@ -62,5 +62,3 @@ def _get_file_type_from_string(str):
     #assert 
     return ty
 
-print RegularFile
-print DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7L)
