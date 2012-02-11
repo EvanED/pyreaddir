@@ -27,7 +27,8 @@ class DirectoryEntry(object):
     def __str__(self):
         return '<%s in %s, a %s, extras %s>' % (self.name,
                                                 self.path,
-                                                self.kind,'')
+                                                self.kind,
+                                                self.extra_attrs())
     def __repr__(self):
         return self.__str__()
 
