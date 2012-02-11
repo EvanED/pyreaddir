@@ -17,11 +17,17 @@ class DirectoryEntry(object):
         t = (name, path, kind, frozenset(kwargs.iteritems()))
         object.__setattr__(self, "_the_hash", hash(t))
 
+    def extra_attrs(self):
+        extras = {}
+        for (k, v) in self.__dict__.iteritems():
+            if not k.startswith("_"):
+                extras[k] = v
+        return extras
 
     def __str__(self):
-        return '<%s in %s, a %s, args %s>' % (self.name,
-                                              self.path,
-                                              self.kind,'')
+        return '<%s in %s, a %s, extras %s>' % (self.name,
+                                                self.path,
+                                                self.kind,'')
     def __repr__(self):
         return self.__str__()
 
