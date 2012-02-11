@@ -37,9 +37,6 @@ class DirectoryEntry(object):
     def is_directory(self):
         return self.kind == Directory
 
-    def __getattr__(self, attrname):
-        return self.private_base_.__getattribute__(self, attrname)
-
 
 class FileType(FileTypeBase):
     __slots__ = ()
