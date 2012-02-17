@@ -35,6 +35,11 @@ class DirectoryEntry(object):
     def __setattr__(self, attr, value):
         raise TypeError("DirectoryEntry pretends to be immutable")
 
+    def __getattribute__(self, attr):
+        if attr == "__dict__":
+            raise TypeError("DirectoryEntry pretends to be immutable")
+        return super(DirectoryEntry, self).__getattribute__(attr)
+
     def is_directory(self):
         return self.kind == Directory
 
