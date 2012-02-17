@@ -19,7 +19,8 @@ class DirectoryEntry(object):
 
     def extra_attrs(self):
         extras = {}
-        for (k, v) in self.__dict__.iteritems():
+        d = self.dict_copy()
+        for (k, v) in d.iteritems():
             if not k.startswith("_"):
                 extras[k] = v
         return extras
@@ -43,6 +44,8 @@ class DirectoryEntry(object):
     def is_directory(self):
         return self.kind == Directory
 
+    def dict_copy(self):
+        return dict(object.__getattribute__(self, "__dict__"))
 
 class FileType(FileTypeBase):
     __slots__ = ()
