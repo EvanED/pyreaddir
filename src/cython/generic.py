@@ -47,6 +47,10 @@ class DirectoryEntry(object):
     def dict_copy(self):
         return dict(object.__getattribute__(self, "__dict__"))
 
+    def __eq__(self, other):
+        return self.dict_copy() == other.dict_copy()
+
+
 class FileType(FileTypeBase):
     __slots__ = ()
 

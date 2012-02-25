@@ -33,6 +33,13 @@ class Tests(unittest.TestCase):
         with self.assertRaisesRegexp(TypeError, ".*immutable.*"):
             d = self.e.__dict__
 
+    def test_exact_dupe(self):
+        exact_dupe = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7L)
+        self.assertEqual(self.e, exact_dupe)
+
+    def test_equal_but_different_kind_of_inode_integer(self):
+        equal = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7)
+        self.assertEqual(self.e, equal)
 
         
 
