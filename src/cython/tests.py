@@ -116,7 +116,7 @@ def remove_workspace(workspace):
 
 import unittest
 class TestBlah(unittest.TestCase):
-    def test_blah(self):
+    def test_basic_readdir(self):
         actual = list(readdir(test_tree["root dir"]))
         actual.sort()
         expected = list(test_tree["contents"])
