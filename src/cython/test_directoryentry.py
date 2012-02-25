@@ -49,6 +49,29 @@ class Tests(unittest.TestCase):
         exact_dupe = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7)
         self.assertEqual(hash(self.e), hash(exact_dupe))
 
+    def test_different_name_is_unequal(self):
+        other = DirectoryEntry("sporz", "/bar/baz", RegularFile, inode=7L)
+        self.assertNotEqual(self.e, other)
+
+    def test_different_dir_is_unequal(self):
+        other = DirectoryEntry("foo", "/bar/sporz", RegularFile, inode=7L)
+        self.assertNotEqual(self.e, other)
+
+    def test_different_type_is_unequal(self):
+        other = DirectoryEntry("foo", "/bar/baz", Directory, inode=7L)
+        self.assertNotEqual(self.e, other)
+
+    def test_different_inode_is_unequal(self):
+        other = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=8L)
+        self.assertNotEqual(self.e, other)
+
+    def test_no_inode_is_unequal(self):
+        other = DirectoryEntry("foo", "/bar/baz", RegularFile)
+        self.assertNotEqual(self.e, other)
+
+    def test_different_name_has_unequal_hash(self):
+        other = DirectoryEntry("sporz", "/bar/baz", RegularFile, inode=7L)
+        self.assertNotEqual(hash(self.e), hash(other))
 
 
 
