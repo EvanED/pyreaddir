@@ -50,6 +50,9 @@ class DirectoryEntry(object):
     def __eq__(self, other):
         return self.dict_copy() == other.dict_copy()
 
+    def __hash__(self):
+        return hash(frozenset(self.dict_copy().iteritems()))
+
 
 class FileType(FileTypeBase):
     __slots__ = ()

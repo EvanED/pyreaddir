@@ -1,4 +1,4 @@
-from generic import DirectoryEntry, RegularFile
+from generic import DirectoryEntry, RegularFile, Directory
 import unittest
 
 class Tests(unittest.TestCase):
@@ -33,13 +33,26 @@ class Tests(unittest.TestCase):
         with self.assertRaisesRegexp(TypeError, ".*immutable.*"):
             d = self.e.__dict__
 
-    def test_exact_dupe(self):
+    def test_exact_dupe_is_equal(self):
         exact_dupe = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7L)
         self.assertEqual(self.e, exact_dupe)
 
     def test_equal_but_different_kind_of_inode_integer(self):
         equal = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7)
         self.assertEqual(self.e, equal)
+
+    def test_exact_dupe_has_same_hash(self):
+        exact_dupe = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7L)
+        self.assertEqual(hash(self.e), hash(exact_dupe))
+
+    def test_almost_exact_dupe_has_same_hash(self):
+        exact_dupe = DirectoryEntry("foo", "/bar/baz", RegularFile, inode=7)
+        self.assertEqual(hash(self.e), hash(exact_dupe))
+
+
+
+
+
 
         
 
