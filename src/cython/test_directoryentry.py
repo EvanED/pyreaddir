@@ -73,6 +73,13 @@ class Tests(unittest.TestCase):
         other = DirectoryEntry("sporz", "/bar/baz", RegularFile, inode=7L)
         self.assertNotEqual(hash(self.e), hash(other))
 
+    def test_less_than(self):
+        a = DirectoryEntry("a", "/b/baz", RegularFile, inode=7)
+        dot = DirectoryEntry(".", "/bar/baz", RegularFile, inode=7L)
+        self.assertLess(dot, a)
+        
+
+
 
 
 
