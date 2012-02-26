@@ -48,10 +48,35 @@ class DirectoryEntry(object):
         return dict(object.__getattribute__(self, "__dict__"))
 
     def __eq__(self, other):
-        return self.dict_copy() == other.dict_copy()
+        r = self.dict_copy() == other.dict_copy()
+        return r
+
+    def __ne__(self, other):
+        r = self.dict_copy() != other.dict_copy()
+        return r
+
+    def __le__(self, other):
+        a = sorted(self.dict_copy().iteritems())
+        b = sorted(other.dict_copy().iteritems())
+        return a <= b
+
+    def __lt__(self, other):
+        a = sorted(self.dict_copy().iteritems())
+        b = sorted(other.dict_copy().iteritems())
+        return a < b
+
+    def __ge__(self, other):
+        a = sorted(self.dict_copy().iteritems())
+        b = sorted(other.dict_copy().iteritems())
+        return a >= b
+        
+    def __gt__(self, other):
+        a = sorted(self.dict_copy().iteritems())
+        b = sorted(other.dict_copy().iteritems())
+        return a > b
 
     def __hash__(self):
-        return hash(frozenset(self.dict_copy().iteritems()))
+        return self._the_hash
 
 
 class FileType(FileTypeBase):
