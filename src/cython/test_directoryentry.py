@@ -77,7 +77,9 @@ class Tests(unittest.TestCase):
         a = DirectoryEntry("a", "/b/baz", RegularFile, inode=7)
         dot = DirectoryEntry(".", "/bar/baz", RegularFile, inode=7L)
         self.assertLess(dot, a)
-        
+        self.assertGreater(a, dot)
+        self.assertLessEqual(a, a)
+        self.assertGreaterEqual(a, a)
 
 
 

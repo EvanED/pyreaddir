@@ -123,6 +123,13 @@ class TestBlah(unittest.TestCase):
         expected.sort()
         self.assertEqual(actual, expected)
 
+    def test_readdir_with_star_glob(self):
+        actual = list(readdir(test_tree["root dir"], glob="*"))
+        actual.sort()
+        expected = list(test_tree["contents"])
+        expected.sort()
+        self.assertEqual(actual, expected)
+
 
 
 if __name__ == '__main__':
