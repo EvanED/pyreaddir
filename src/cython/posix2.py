@@ -4,7 +4,7 @@ import generic
 
 def create_glob_matcher(glob):
     def matches(entry):
-        return fnmatch.fnmatch(entry.name(), glob)
+        return fnmatch.fnmatch(entry.name, glob)
     return matches
 
 
