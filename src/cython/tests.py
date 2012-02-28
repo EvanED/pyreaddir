@@ -23,6 +23,8 @@ def set_up_workspace():
 
     test_tree = {}
     test_tree["contents"] = set()
+    test_tree["contents: normal-?-file"] = set()
+    test_tree["contents: normal*"] = set()
 
     root = tempfile.mkdtemp(prefix="pyreaddir.unittests.")
     test_tree["root dir"] = root
@@ -37,6 +39,7 @@ def set_up_workspace():
                                          RegularFile,
                                          inode=ino(normal))
     test_tree["contents"].add(test_tree["normal"])
+    test_tree["contents: normal*"].add(test_tree["normal"])
 
     # Make more more files, used for glob tests
     normal = os.path.join(root, "normal-1-file")
@@ -47,6 +50,9 @@ def set_up_workspace():
                                            RegularFile,
                                            inode=ino(normal))
     test_tree["contents"].add(test_tree["normal-1"])
+    test_tree["contents: normal-?-file"].add(test_tree["normal-1"])
+    test_tree["contents: normal*"].add(test_tree["normal-1"])
+
 
     normal = os.path.join(root, "normal-2-file")
     f = open(normal, "w")
@@ -56,6 +62,8 @@ def set_up_workspace():
                                            RegularFile,
                                            inode=ino(normal))
     test_tree["contents"].add(test_tree["normal-2"])
+    test_tree["contents: normal-?-file"].add(test_tree["normal-2"])
+    test_tree["contents: normal*"].add(test_tree["normal-2"])
 
     normal = os.path.join(root, ".hidden-file")
     f = open(normal, "w")
@@ -85,6 +93,9 @@ def set_up_workspace():
                                               Directory,
                                               inode=ino(test_dir))
     test_tree["contents"].add(test_tree["directory-3"])
+    test_tree["contents: normal-?-file"].add(test_tree["directory-3"])
+    test_tree["contents: normal*"].add(test_tree["directory-3"])
+
 
     if True:
         # (Just indent to show structure)
