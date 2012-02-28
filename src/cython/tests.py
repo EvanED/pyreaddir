@@ -195,13 +195,16 @@ class TestBlah(unittest.TestCase):
         expected.sort()
         self.assertEqual(actual, expected)
 
-    def test_basic_readdir(self):
+    @unittest.expectedFailure
+    def test_recursive_readdir(self):
         actual = list(readdir(test_tree["root dir"], recursive=True))
         actual.sort()
         expected = (list(test_tree["contents"])
                     + list(test_tree["contents: extra recursive"]))
         expected.sort()
         self.assertEqual(actual, expected)
+
+
 
 
 if __name__ == '__main__':
