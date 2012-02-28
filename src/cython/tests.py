@@ -23,6 +23,7 @@ def set_up_workspace():
 
     test_tree = {}
     test_tree["contents"] = set()
+    test_tree["contents: extra recursive"] = set()
     test_tree["contents: normal-?-file"] = set()
     test_tree["contents: normal*"] = set()
 
@@ -107,6 +108,7 @@ def set_up_workspace():
                                                         test_dir,
                                                         RegularFile,
                                                         inode=ino(inner))
+        test_tree["contents: extra recursive"].add(test_tree["file in directory"])
 
     # Create a named pipe
     fifo = os.path.join(root, "fifo")
@@ -193,6 +195,13 @@ class TestBlah(unittest.TestCase):
         expected.sort()
         self.assertEqual(actual, expected)
 
+    def test_basic_readdir(self):
+        actual = list(readdir(test_tree["root dir"], recursive=True))
+        actual.sort()
+        expected = (list(test_tree["contents"])
+                    + list(test_tree["contents: extra recursive"]))
+        expected.sort()
+        self.assertEqual(actual, expected)
 
 
 if __name__ == '__main__':
