@@ -180,16 +180,16 @@ class TestBlah(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_readdir_with_normal_q_file_glob(self):
-        actual = list(readdir(test_tree["root dir"], glob="normal-*-file"))
+        actual = list(readdir(test_tree["root dir"], glob="normal-?-file"))
         actual.sort()
-        expected = list(test_tree["normal-*-file"])
+        expected = list(test_tree["contents: normal-?-file"])
         expected.sort()
         self.assertEqual(actual, expected)
 
     def test_readdir_with_normal_star_glob(self):
         actual = list(readdir(test_tree["root dir"], glob="normal*"))
         actual.sort()
-        expected = list(test_tree["normal*"])
+        expected = list(test_tree["contents: normal*"])
         expected.sort()
         self.assertEqual(actual, expected)
 
