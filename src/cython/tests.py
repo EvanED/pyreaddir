@@ -38,6 +38,35 @@ def set_up_workspace():
                                          inode=ino(normal))
     test_tree["contents"].add(test_tree["normal"])
 
+    # Make more more files, used for glob tests
+    normal = os.path.join(root, "normal-1-file")
+    f = open(normal, "w")
+    f.close()
+    test_tree["normal-1"] = DirectoryEntry("normal-1-file",
+                                           root,
+                                           RegularFile,
+                                           inode=ino(normal))
+    test_tree["contents"].add(test_tree["normal-1"])
+
+    normal = os.path.join(root, "normal-2-file")
+    f = open(normal, "w")
+    f.close()
+    test_tree["normal-2"] = DirectoryEntry("normal-2-file",
+                                           root,
+                                           RegularFile,
+                                           inode=ino(normal))
+    test_tree["contents"].add(test_tree["normal-2"])
+
+    normal = os.path.join(root, ".hidden-file")
+    f = open(normal, "w")
+    f.close()
+    test_tree["hidden"] = DirectoryEntry(".hidden-file",
+                                         root,
+                                         RegularFile,
+                                         inode=ino(normal))
+    test_tree["contents"].add(test_tree["hidden"])
+
+
     # Create a directory
     test_dir = os.path.join(root, "directory")
     os.mkdir(test_dir)
@@ -47,6 +76,15 @@ def set_up_workspace():
                                             Directory,
                                             inode=ino(test_dir))
     test_tree["contents"].add(test_tree["directory"])
+
+    test_dir = os.path.join(root, "normal-3-file") # It lies
+    os.mkdir(test_dir)
+
+    test_tree["directory-3"] = DirectoryEntry("normal-3-file",
+                                              root,
+                                              Directory,
+                                              inode=ino(test_dir))
+    test_tree["contents"].add(test_tree["directory-3"])
 
     if True:
         # (Just indent to show structure)
