@@ -35,8 +35,11 @@ def readdir(directory_name, glob="*", extra_filters=None, **kwargs):
 
     iter = readdir_bare_posix.DirectoryIterator(directory_name)
 
-    return (genericize(entry, directory_name)
-            for entry in iter
-            if every_predicate_matches(extra_filters, entry))
+    genericized = (genericize(entry, directory_name)
+                   for entry in iter)
+
+    return (generic
+            for generic in genericized
+            if every_predicate_matches(extra_filters, generic))
 
 
