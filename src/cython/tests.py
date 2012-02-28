@@ -204,6 +204,13 @@ class TestBlah(unittest.TestCase):
         expected.sort()
         self.assertEqual(actual, expected)
 
+    def test_readdir_with_normal_1_or_3_file_glob(self):
+        actual = list(readdir(test_tree["root dir"], glob="normal-[13]-file"))
+        actual.sort()
+        expected = list(entry for entry in test_tree["contents: normal-?-file"]
+                        if entry.name != "normal-2-file")
+        expected.sort()
+        self.assertEqual(actual, expected)
 
 
 
