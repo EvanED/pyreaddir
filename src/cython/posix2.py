@@ -22,14 +22,16 @@ def genericize(entry_dict, path):
                                   inode = entry_dict["inode"])
 
 
-def readdir(directory_name, glob="*", extra_filters=[], **kwargs):
+def readdir(directory_name, glob="*", extra_filters=None, **kwargs):
+    if extra_filters is None:
+        extra_filters = []
     if len(kwargs) != 0:
         # Warn unsupported args. Specifically check for 'transaction'
         # and 'limit_information'?
         pass
 
     if glob != "*":
-        extra_filters += create_glob_matcher(glob)
+        extra_filters.append(create_glob_matcher(glob))
 
     iter = readdir_bare_posix.DirectoryIterator(directory_name)
 
