@@ -223,7 +223,7 @@ class TestBlah(unittest.TestCase):
         
         # Make sure all fields exist
         normal_file.name
-        normal_file.type
+        normal_file.kind
         normal_file.inode
 
     def test_file_does_not_have_windows_attributes(self):

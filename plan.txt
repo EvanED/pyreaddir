@@ -29,15 +29,15 @@ the following attributes:
 
     name: the file name
 
-    type, available on most systems: one of a set of predefined
+    kind, available on most systems: one of a set of predefined
     values: regular file, directory, device (on POSIX, an attribute of
-    the type field itself will indicate block or character), and
-    symbol link (on Windows, an attribute of the type field itself
+    the kind field itself will indicate block or character), and
+    symbol link (on Windows, an attribute of the kind field itself
     will indicate the type of symlink) will be available across all
-    type-capable systems. On POSIX, other options are FIFO, socket,
+    kind-capable systems. On POSIX, other options are FIFO, socket,
     and unknown. On Windows, reparse point. (Reparse points with the
     SYMLINK tag will count as a symlink. Other tags will be available
-    as an attribute of type itself.)
+    as an attribute of kind itself.)
 
     inode, available on POSIX.
 
