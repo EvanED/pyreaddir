@@ -212,6 +212,48 @@ class TestBlah(unittest.TestCase):
         expected.sort()
         self.assertEqual(actual, expected)
 
+    def test_file_has_specified_attributes(self):
+        actual = list(readdir(test_tree["root dir"]))
+        normal_file = [f
+                       for f in actual
+                       if f.name == "normal-file"]
+        # There should be exactly one of these
+        self.assertEqual(len(normal_file), 1)
+        normal_file = normal_file[0]
+        
+        # Make sure all fields exist
+        normal_file.name
+        normal_file.type
+        normal_file.inode
+
+    def test_file_does_not_have_windows_attributes(self):
+        actual = list(readdir(test_tree["root dir"]))
+        normal_file = [f
+                       for f in actual
+                       if f.name == "normal-file"]
+        # There should be exactly one of these
+        self.assertEqual(len(normal_file), 1)
+        normal_file = normal_file[0]
+        
+        # None of these should exist; they are Windows-only
+        with self.assertRaises(AttributeError):
+            normal_file.attributes
+
+        with self.assertRaises(AttributeError):
+            normal_file.creation_time
+
+        with self.assertRaises(AttributeError):
+            normal_file.modification_time
+
+        with self.assertRaises(AttributeError):
+            normal_file.access_time
+
+        with self.assertRaises(AttributeError):
+            normal_file.size
+
+        with self.assertRaises(AttributeError):
+            normal_file.short_name
+
 
 
 if __name__ == '__main__':
