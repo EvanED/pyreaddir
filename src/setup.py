@@ -51,5 +51,5 @@ setup(
                    'test'     : TestCommand},
     ext_modules = [Extension("readdir.posix_bare", ["lib/posix_bare.pyx"])],
     package_dir = {'readdir': 'lib'},
-    py_modules  = ['readdir.generic', 'readdir.posix_wrapper']
+    packages  = ['readdir']
 )
