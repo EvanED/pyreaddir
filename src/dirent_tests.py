@@ -1,5 +1,5 @@
-from readdir.generic import (DirectoryEntry, RegularFile, Directory,
-                             SymbolicLink, NamedPipe)
+from readdir import (DirectoryEntry, RegularFile, Directory,
+                     SymbolicLink, NamedPipe)
 import unittest
 
 class TestDirectoryEntry(unittest.TestCase):

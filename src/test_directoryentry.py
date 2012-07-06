@@ -1,4 +1,4 @@
-from readdir.generic import DirectoryEntry, RegularFile, Directory
+from readdir import DirectoryEntry, RegularFile, Directory
 import unittest
 
 class Tests(unittest.TestCase):
