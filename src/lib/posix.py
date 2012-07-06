@@ -1,4 +1,4 @@
-import readdir_bare_posix
+import posix_bare
 import fnmatch
 import generic
 

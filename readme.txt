@@ -1,3 +1,7 @@
+NOT ALL OF THIS IS IMPLEMENTED YET. (This file was originally called
+plan.txt but I renamed it for GitHub's benefit.)
+
+
 readdir(directory, glob="*", extra_filters=[],
         [transaction=None, limit_information=None])
 
