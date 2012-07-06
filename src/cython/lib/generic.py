@@ -44,8 +44,12 @@ class DirectoryEntry(object):
     def is_directory(self):
         return self.kind == Directory
 
-    def dict_copy(self):
-        return dict(object.__getattribute__(self, "__dict__"))
+    def dict_copy(self, keep_privates=False):
+        def keep(key):
+            return key[0] != "_" or keep_privates
+        d = object.__getattribute__(self, "__dict__")
+        d = {k:v for (k,v) in d.iteritems() if keep(k)}
+        return d
 
     def to_json(self):
         return json.dumps(self.dict_copy())
