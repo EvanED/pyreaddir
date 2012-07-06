@@ -2,9 +2,9 @@ import tempfile
 import os
 import shutil
 
-from generic import (DirectoryEntry, RegularFile, Directory,
-                     SymbolicLink, NamedPipe)
-from posix_wrapper import readdir
+from readdir.generic import (DirectoryEntry, RegularFile, Directory,
+                             SymbolicLink, NamedPipe)
+from readdir.posix_wrapper import readdir
 
 test_tree = None
 
