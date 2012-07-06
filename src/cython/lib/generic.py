@@ -1,5 +1,5 @@
 import os.path
-
+import json
 import collections
 
 FileTypeBase = collections.namedtuple("FileTypeBase",
@@ -46,6 +46,9 @@ class DirectoryEntry(object):
 
     def dict_copy(self):
         return dict(object.__getattribute__(self, "__dict__"))
+
+    def to_json(self):
+        return json.dumps(self.dict_copy())
 
     def __eq__(self, other):
         r = self.dict_copy() == other.dict_copy()
