@@ -4,7 +4,7 @@ import shutil
 
 from generic import (DirectoryEntry, RegularFile, Directory,
                      SymbolicLink, NamedPipe)
-from posix2 import readdir
+from posix_wrapper import readdir
 
 test_tree = None
 
