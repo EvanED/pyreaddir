@@ -33,7 +33,7 @@ def readdir(directory_name, glob="*", extra_filters=None, **kwargs):
     if glob != "*":
         extra_filters.append(create_glob_matcher(glob))
 
-    iter = readdir_bare_posix.DirectoryIterator(directory_name)
+    iter = posix_bare.DirectoryIterator(directory_name)
 
     genericized = (genericize(entry, directory_name)
                    for entry in iter)

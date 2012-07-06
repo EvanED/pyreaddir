@@ -51,5 +51,5 @@ setup(
                    'test'     : TestCommand},
     ext_modules = [Extension("posix_bare", ["lib/posix_bare.pyx"])],
     package_dir = {'': 'lib'},
-    py_modules  = ['generic', 'posix']
+    py_modules  = ['generic', 'posix_wrapper']
 )
