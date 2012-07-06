@@ -49,7 +49,7 @@ class TestCommand(Command):
 setup(
     cmdclass    = {'build_ext': build_ext,
                    'test'     : TestCommand},
-    ext_modules = [Extension("posix_bare", ["lib/posix_bare.pyx"])],
-    package_dir = {'': 'lib'},
-    py_modules  = ['generic', 'posix_wrapper']
+    ext_modules = [Extension("readdir.posix_bare", ["lib/posix_bare.pyx"])],
+    package_dir = {'readdir': 'lib'},
+    py_modules  = ['readdir.generic', 'readdir.posix_wrapper']
 )
