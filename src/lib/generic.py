@@ -51,8 +51,11 @@ class DirectoryEntry(object):
         d = {k:v for (k,v) in d.iteritems() if keep(k)}
         return d
 
-    def to_json(self):
-        return json.dumps(self.dict_copy())
+    def to_json(self, extras=None):
+        if extras is None:
+            extras={}
+        extras.update(self.dict_copy())
+        return json.dumps(extras)
 
     def __eq__(self, other):
         r = self.dict_copy() == other.dict_copy()
