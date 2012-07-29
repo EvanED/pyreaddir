@@ -8,7 +8,7 @@ FileTypeBase = collections.namedtuple("FileTypeBase",
 class DirectoryEntry(object):
     def __init__(self, name, path, kind, **kwargs):
         object.__setattr__(self, "name", name)
-        object.__setattr__(self, "path", path)
+        object.__setattr__(self, "in-directory", path)
         object.__setattr__(self, "kind", kind)
 
         for (k,v) in kwargs.iteritems():
